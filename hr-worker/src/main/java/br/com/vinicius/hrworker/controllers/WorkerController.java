@@ -2,7 +2,10 @@ package br.com.vinicius.hrworker.controllers;
 
 import br.com.vinicius.hrworker.entities.Worker;
 import br.com.vinicius.hrworker.repositories.WorkerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/workers")
 public class WorkerController {
+    private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
+    @Autowired
+    private Environment env;
     @Autowired
     private WorkerRepository repository;
 
@@ -28,6 +34,9 @@ public class WorkerController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Worker> findById(@PathVariable Long id){
+
+        logger.info("PORT = " + env.getProperty("local.server.port"));
+
         Worker worker = repository.findById(id).orElse(null);
         return ResponseEntity.ok(worker);
     }

@@ -5,6 +5,7 @@ import br.com.vinicius.hrworker.repositories.WorkerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +22,18 @@ import java.util.List;
 @RequestMapping(path = "/workers")
 public class WorkerController {
     private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
+    @Value("${test.config}")
+    private String testConfig;
     @Autowired
     private Environment env;
     @Autowired
     private WorkerRepository repository;
+
+    @GetMapping(path = "/configs")
+    public ResponseEntity<Void> getConfigs(){
+        logger.info("CONFIG = " + testConfig);
+        return  ResponseEntity.noContent().build();
+    }
 
     @GetMapping
     public ResponseEntity<Page<Worker>> findAll(Pageable pageable){
